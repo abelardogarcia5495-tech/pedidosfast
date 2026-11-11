@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PedidosFast - Pide Rápido</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#fff7ed}
+header{background:#ea580c;color:white;padding:18px;text-align:center}
+header h1{margin:0;font-size:28px}
+header p{margin:5px 0 0}
+.container{padding:15px;max-width:600px;margin:auto}
+.card{background:white;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items:center}
+.card h3{margin:0}
+.card p{margin:5px 0;color:#666;font-size:14px}
+.price{font-weight:bold;color:#ea580c;font-size:18px}
+button{background:#ea580c;color:white;border:none;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer}
+#carrito{background:white;border-radius:12px;padding:15px;margin-top:20px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+input{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+.wa{background:#25D366;width:100%;padding:14px;font-size:16px}
+</style>
+</head>
+<body>
+<header><h1>🍔 PedidosFast</h1><p>Tu pedido rápido en Palencia</p></header>
+<div class="container">
+<h2>Menú</h2>
+<div id="menu"></div>
+<div id="carrito">
+<h2>🛒 Tu Pedido</h2>
+<div id="items">Aún no hay productos</div>
+<p><b>Total: Q<span id="total">0</span></b></p>
+<input id="nombre" placeholder="Tu nombre">
+<input id="direccion" placeholder="Tu dirección / referencia">
+<button class="wa" onclick="pedir()">Pedir por WhatsApp</button>
+</div>
+</div>
+<script>
+const productos=[
+{name:"Hamburguesa Clásica",desc:"Carne, queso, lechuga, tomate",price:35},
+{name:"Pizza Personal",desc:"Pepperoni y queso mozzarella",price:40},
+{name:"Tacos x3",desc:"Pollo o res con salsa",price:30},
+{name:"Pollo Frito",desc:"2 piezas + papas",price:38},
+{name:"Bebida Fría",desc:"Soda o agua",price:10},
+{name:"Papas Fritas",desc:"Crujientes con ketchup",price:18},
+];
+let cart=[];
+function render(){
+document.getElementById('menu').innerHTML=productos.map((p,i)=>`<div class="card"><div><h3>${p.name}</h3><p>${p.desc}</p><span class="price">Q${p.price}</span></div><button onclick="add(${i})">+ Agregar</button></div>`).join('');
+let total=0;
+let html=cart.map(c=>{total+=c.price;return `<p>${c.name} - Q${c.price}</p>`}).join('');
+document.getElementById('items').innerHTML=cart.length?html:'Aún no hay productos';
+document.getElementById('total').innerText=total;
+}
+function add(i){cart.push(productos[i]);render();}
+function pedir(){
+let total=document.getElementById('total').innerText;
+let nombre=document.getElementById('nombre').value||'Cliente';
+let dir=document.getElementById('direccion').value||'Sin dirección';
+let msg=`Hola PedidosFast! Soy ${nombre}%0AQuiero pedir:%0A`+cart.map(c=>`- ${c.name} Q${c.price}`).join('%0A')+`%0ATotal: Q${total}%0ADirección: ${dir}`;
+window.open(`https://wa.me/50200000000?text=${msg}`,'_blank');
+}
+render();
+</script>
+</body>
+</html>
